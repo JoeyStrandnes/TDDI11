@@ -3,11 +3,25 @@
 #include <math.h>
 #include <X11/Xlib.h>
 
-// compile and run
-// gcc main.c -lm -lX11
-// ./a.out
-// To exit:
-// ctrl+c 
+
+/*
+1. Assume a circle around the current mouse position etc...
+	No, the acceleleration fo the mouse movement will effect the reading. 
+
+2. Name an alternative for the Euclidean metric that we used. etc...
+	Cartesian model is an alternative. It uses streight lines instead of a circle. 
+
+3. What are advantages and disadvantages of Euclidean metric?
+	Its a circle :D
+
+
+4. Modify the code, compile, and run it for alpha equal to 0.01, 0.5, and 0.99. etc...
+	The alpha changes the size of the circle and "motionThreshold" checks for mouse acceleration.
+	I foudn that alpha = 0.69 is a good trade-off. 
+	
+
+*/
+
 
 
 int main(int argc, char **argv)
@@ -20,7 +34,7 @@ int main(int argc, char **argv)
 	double combinedMotion = 0; 
 	double motionMetric = 0; 	
 	static double motionThreshold = 90;
-	static double alpha = 0.99;
+	static double alpha = 0.69;
 	double beta = 1 - alpha;
 	struct timeval  timeReadOut;	
 	long double timerValueSeconds = 0;
