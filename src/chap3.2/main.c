@@ -19,7 +19,6 @@
 	The alpha changes the size of the circle and "motionThreshold" checks for mouse acceleration.
 	I foudn that alpha = 0.69 is a good trade-off. 
 	
-
 */
 
 

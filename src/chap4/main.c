@@ -1,8 +1,7 @@
 #include <libepc.h>
+//#include <./llmultiply.asm>
 
-void llmultiply(unsigned long long int l1,
-                unsigned long long int l2,
-                unsigned char *result);
+void llmultiply(unsigned long long int l1, unsigned long long int l2, unsigned char *result);
 
 struct test_case {
   unsigned long long int a;
@@ -41,6 +40,7 @@ void PutUnsignedLongLong(unsigned long long int* ulli)
 
 int main(int argc, char *argv[])
 {
+
   unsigned char result[16];
   int i;
   
@@ -69,6 +69,6 @@ int main(int argc, char *argv[])
     
     PutString("\r\n");
   }
-
+  
   return 0;
 }
