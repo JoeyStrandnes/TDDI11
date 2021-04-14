@@ -36,7 +36,7 @@ BITS	32
 	;; to write your assembly code a little bit more readable: 
 	;;   MOV EAX, [EBP + BH_OFF]
 
-;; First byte + return address 4 byte addressing
+;; Return address(4 bytes) Databyte + return address 4 byte addressing
 AL_OFF	EQU     8	; Offset from EBP to low  bits of a (AL)
 AH_OFF	EQU     12	; Offset from EBP to high bits of a (AH)
 BL_OFF	EQU     16	; Offset from EBP to low  bits of b (BL)
@@ -49,36 +49,67 @@ RES_OFF	EQU     24	; Offset from EBP to result array pointer
 llmultiply:
 	PUSH EBP
 	MOV EBP , ESP ; Set base pointer to beginning of function
+
+
+	;Clean result bytes
+	MOV ECX  , [EBP + RES_OFF]
+	MOV EAX, 0
+	MOV [ECX], EAX
+	ADD ECX, 4
+	MOV [ECX], EAX
+	ADD ECX, 4
+	MOV [ECX], EAX
+	ADD ECX, 4
+	MOV [ECX], EAX
+
 	
 	; Multiply AL and BL and store it
+
 	MOV EAX , [EBP + AL_OFF]	; move value from EBP + offsett to EAX
 	MOV EBX , [EBP + BL_OFF]	; move value from EBP + offsett to EBX
 	MUL EBX						; EDX = High, EAX = Low
 	; Save carry into RES_OFF
-	MOV [EBP + RES_OFF], EAX
-	MOV [EBP + RES_OFF + 4], EDX
+	MOV ECX  , [EBP + RES_OFF]
+	MOV [ECX], EAX	
+	MOV [ECX + 4] , EDX
 
+
+	;AH * BL ;Memory location 4 to 7
 	MOV EAX , [EBP + AH_OFF]	; move value from EBP + offsett to EAX
 	MOV EBX , [EBP + BL_OFF]	; move value from EBP + offsett to EBX
 	MUL EBX						; EDX = High, EAX = Low
-	; Save carry into RES_OFF
-	ADD [EBP + RES_OFF + 4], EAX
-	MOV [EBP + RES_OFF + 8], EDX
+	
+	AND EBX, 0
+	ADD [ECX + 4], EAX			;Get old values to ensure it doesn't get overwritten
+	ADC [ECX + 8], EDX
+	ADC [ECX + 12], EBX
 
+	
+	
+	;Memory location 8 to 11
+
+	;AL * BH
 	MOV EAX , [EBP + AL_OFF]	; move value from EBP + offsett to EAX
 	MOV EBX , [EBP + BH_OFF]	; move value from EBP + offsett to EBX
 	MUL EBX						; EDX = High, EAX = Low
-	; Save carry into RES_OFF
-	ADD [EBP + RES_OFF + 4], EAX
-	ADD [EBP + RES_OFF + 8], EDX
 
+	;Memory location 4 to 7	
+	AND EBX, 0
+	ADD [ECX + 4], EAX				;Get old values to ensure it doesn't get overwritten
+	ADC [ECX + 8], EDX
+	ADC [ECX + 12], EBX
+
+
+	;AH * BH
 	MOV EAX , [EBP + AH_OFF]	; move value from EBP + offsett to EAX
 	MOV EBX , [EBP + BH_OFF]	; move value from EBP + offsett to EBX
 	MUL EBX						; EDX = High, EAX = Low
-	; Save carry into RES_OFF
-	ADD [EBP + RES_OFF + 8], EAX
-	ADD [EBP + RES_OFF + 12], EDX
 
 
+	AND EBX, 0	
+	ADD [ECX + 8], EAX
+	ADC [ECX + 12], EDX
+
+		
 	POP EBP				; restore EBP reg
 	RET					;  return
