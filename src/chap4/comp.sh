@@ -3,7 +3,7 @@
 clear
 
 make clean all
-make
+make -o0
 
 export MTOOLSRC=mtools.conf
 
