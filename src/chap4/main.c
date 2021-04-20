@@ -4,76 +4,127 @@
 
 void llmultiply(unsigned long long int l1, unsigned long long int l2, unsigned char *result);
 
-
-
+//#define AL (unsigned long long int) *(L1_ptr + 0)
+//#define AH (unsigned long long int) *(L1_ptr + 1)
+//#define BL (unsigned long long int) *(L2_ptr + 0)
+//#define BH (unsigned long long int) *(L2_ptr + 1)
+#define ll (unsigned long long int)
 
 void C_llmultiply(unsigned long long int l1, unsigned long long int l2, unsigned char *result)
 {
 
-  unsigned int Carry_Flag = 0;
-  unsigned long int Carry_Checker; // OwO
+  //unsigned int Carry_Flag = 0;
+  unsigned long int Carry_Checker = 0; // OwO
 
   unsigned long long int Temp_Mul;
   unsigned long int* Result_ptr = ((unsigned long int*) result);
-  *Result_ptr = 0;
-  *(Result_ptr +1) = 0;
-  *(Result_ptr +2) = 0;
-  *(Result_ptr +3) = 0;
+  Result_ptr[0] = 0;
+  Result_ptr[1] = 0;
+  Result_ptr[2] = 0;
+  Result_ptr[3] = 0;
 
   unsigned long int *L1_ptr = (unsigned long int*)&l1;
   unsigned long int *L2_ptr = (unsigned long int*)&l2;
 
   unsigned long int *Mul_ptr = (unsigned long int*)&Temp_Mul;
 
-  
-  unsigned long int *AL = (L1_ptr);
-  unsigned long int *AH = (L1_ptr+1); 
+  /*
+  unsigned long int* AL = L1_ptr + 0;
+  unsigned long int* AH = L1_ptr + 1; 
 
-  unsigned long int *BL = (L2_ptr);
-  unsigned long int *BH = (L2_ptr+1);
+  unsigned long int* BL = L1_ptr + 0;
+  unsigned long int* BH = L1_ptr + 1;
+  */
+
+  //unsigned long int* Mul_L = Mul_ptr + 0;
+  //unsigned long int* Mul_H = Mul_ptr + 1;
   
-  unsigned long int *Mul_L = Mul_ptr;
-  unsigned long int *Mul_H = Mul_ptr+1;
+  
+
+  unsigned long int AL = L1_ptr[0];
+  unsigned long int AH = L1_ptr[1];
+
+  unsigned long int BL = *(L2_ptr + 0);
+  unsigned long int BH = *(L2_ptr + 1);
+
+
+
+  /*
+  unsigned long int AL = l1;
+  unsigned long int AH = (l1 >> 32);
+
+  unsigned long int BL = l2;
+  unsigned long int BH = (l2 >> 32);
+  */
+
+  unsigned long int Mul_L;
+  unsigned long int Mul_H;
 
   //Step 1
-  Temp_Mul = ((*AL) * (*BL));
-
-  *Result_ptr += *Mul_L;       // First time addressing memory location. ^_^
-  *(Result_ptr + 1) += *Mul_H; // First time addressing memory location. ^_^
+  Temp_Mul = ll AL * ll BL;
+  Mul_L = Temp_Mul;
+  Mul_H = (Temp_Mul >> 32);
+  Result_ptr[0] += Mul_L;
+  
+  Result_ptr[1] += Mul_H; 
 
   //Step 2
-  Temp_Mul = ((*AH) * (*BL));
-  Carry_Checker = *(Result_ptr+1);
-  *(Result_ptr + 1) += *Mul_L;      
-  Carry_Flag = (Carry_Checker < *(Result_ptr+1));
-  *(Result_ptr + 2) += Carry_Flag;
-  Carry_Checker = *(Result_ptr+2);
-  *(Result_ptr + 2) += *Mul_H; // First time addressing memory location. ^_^
-  Carry_Flag = (Carry_Checker < *(Result_ptr+2));
-  *(Result_ptr + 3) += Carry_Flag; // First time addressing memory location. ^_^
+  Temp_Mul = ll AH * ll BL;
+  Mul_L = Temp_Mul;
+  Mul_H = (Temp_Mul >> 32);
 
+  Carry_Checker = Result_ptr[1];
+  Result_ptr[1] += Mul_L;      
+  
+  if(Carry_Checker > Result_ptr[1])
+  {
+    Result_ptr[2]++;
+  }
+  
+  Carry_Checker = Result_ptr[2];
+  Result_ptr[2] += Mul_H; 
+  
+  if(Carry_Checker > Result_ptr[2])
+  {
+    Result_ptr[3]++;
+  }
+ 
+  Temp_Mul = ll AL * ll BH;
+  Mul_L = Temp_Mul;
+  Mul_H = (Temp_Mul >> 32);
 
-  Temp_Mul = ((*AL) * (*BH));
-  Carry_Checker = *(Result_ptr+1);
-  *(Result_ptr +1) += *Mul_L;      
-  Carry_Flag = (Carry_Checker < *(Result_ptr+1));
-  *(Result_ptr + 2) += Carry_Flag;
-  Carry_Checker = *(Result_ptr+2);
-  *(Result_ptr + 2) += *Mul_H;
-  Carry_Flag = (Carry_Checker < *(Result_ptr+2));
-  *(Result_ptr + 3) += Carry_Flag;
+  Carry_Checker = Result_ptr[1];
+  Result_ptr[1] += Mul_L;      
+
+  if(Carry_Checker > Result_ptr[1])
+  {
+    Result_ptr[2]++;
+  }
+
+  Carry_Checker = Result_ptr[2];
+  Result_ptr[2] += Mul_H; 
+  
+  if(Carry_Checker > Result_ptr[2])
+  {
+    Result_ptr[3]++;
+  }
 
 
   //Step 3
-  Temp_Mul = ((*AH) * (*BH));
+  Temp_Mul = ll AH * ll BH;
+  Mul_L = Temp_Mul;
+  Mul_H = (Temp_Mul >> 32);
 
-  *(Result_ptr +2) += *Mul_L;      
-  *(Result_ptr + 3) += *Mul_H; 
+  Carry_Checker = Result_ptr[2];
+  Result_ptr[2] += Mul_L;      
   
-  Carry_Checker = *(Result_ptr+3);
-  Carry_Flag = (Carry_Checker < *(Result_ptr+3));
-  *(Result_ptr + 3) += Carry_Flag;
-
+  if(Carry_Checker > Result_ptr[2])
+  {
+    Result_ptr[3]++;
+  }
+  
+  Result_ptr[3] += Mul_H;
+  
 
 }
 
