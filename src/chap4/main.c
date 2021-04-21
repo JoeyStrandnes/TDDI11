@@ -1,6 +1,18 @@
 #include <libepc.h>
 
+/*
+  Assembly cycle time: 35391919
 
+  C cycle time -O0: 33391744
+
+  C cycle time -O1: varies between 28487535 and 33665132 also very random
+
+  C cycle time -O2: random
+  
+  C cycle time -O3: 32692100 also random
+
+  C cycle time -Ofast: random
+*/
 
 void llmultiply(unsigned long long int l1, unsigned long long int l2, unsigned char *result);
 
@@ -28,34 +40,12 @@ void C_llmultiply(unsigned long long int l1, unsigned long long int l2, unsigned
 
   unsigned long int *Mul_ptr = (unsigned long int*)&Temp_Mul;
 
-  /*
-  unsigned long int* AL = L1_ptr + 0;
-  unsigned long int* AH = L1_ptr + 1; 
-
-  unsigned long int* BL = L1_ptr + 0;
-  unsigned long int* BH = L1_ptr + 1;
-  */
-
-  //unsigned long int* Mul_L = Mul_ptr + 0;
-  //unsigned long int* Mul_H = Mul_ptr + 1;
-  
-  
 
   unsigned long int AL = L1_ptr[0];
   unsigned long int AH = L1_ptr[1];
 
   unsigned long int BL = *(L2_ptr + 0);
   unsigned long int BH = *(L2_ptr + 1);
-
-
-
-  /*
-  unsigned long int AL = l1;
-  unsigned long int AH = (l1 >> 32);
-
-  unsigned long int BL = l2;
-  unsigned long int BH = (l2 >> 32);
-  */
 
   unsigned long int Mul_L;
   unsigned long int Mul_H;
@@ -166,13 +156,16 @@ void PutUnsignedLongLong(unsigned long long int* ulli)
 
 int main(int argc, char *argv[])
 {
-
+  QWORD64 CL_base = 0;
+  QWORD64 CL_new = 0;
   unsigned char result[16];
   int i;
   
+
   ClearScreen(0x07);
   SetCursorPosition(0, 0);
 
+  CL_base = CPU_Clock_Cycles();
   for (i = 0; i < 6; ++i)
   {
     PutString("Test : ");
@@ -186,9 +179,10 @@ int main(int argc, char *argv[])
     PutUnsignedLongLong(&cases[i].rl);
     PutString("\r\n");
     
+    
     //llmultiply(cases[i].a, cases[i].b, result);
     C_llmultiply(cases[i].a, cases[i].b, result);
-
+    
 
     PutString("Result ");
     PutUnsignedLongLong(&result[8]);
@@ -197,6 +191,14 @@ int main(int argc, char *argv[])
     
     PutString("\r\n");
   }
-  
+
+  CL_new = CPU_Clock_Cycles();
+  PutString("Clock cycles required:");
+  CL_new = (CL_new - CL_base)/6;
+  PutUnsigned(CL_new, 10, 16);
+
+  PutString("\r\n");
+
+
   return 0;
 }
