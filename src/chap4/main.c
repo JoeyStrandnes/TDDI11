@@ -10,71 +10,98 @@ void llmultiply(unsigned long long int l1, unsigned long long int l2, unsigned c
 void C_llmultiply(unsigned long long int l1, unsigned long long int l2, unsigned char *result)
 {
 
+  unsigned long long int TEST_L1 = 100;
+  unsigned long long int TEST_L2 = 200;
+
   unsigned int Carry_Flag = 0;
   unsigned long int Carry_Checker; // OwO
 
   unsigned long long int Temp_Mul;
   unsigned long int* Result_ptr = ((unsigned long int*) result);
-  *Result_ptr = 0;
-  *(Result_ptr +1) = 0;
-  *(Result_ptr +2) = 0;
-  *(Result_ptr +3) = 0;
-
-  unsigned long int *L1_ptr = (unsigned long int*)&l1;
-  unsigned long int *L2_ptr = (unsigned long int*)&l2;
+  Result_ptr[0] = 0;
+  Result_ptr[1] = 0;
+  Result_ptr[2] = 0;
+  Result_ptr[3] = 0;
 
   unsigned long int *Mul_ptr = (unsigned long int*)&Temp_Mul;
 
-  
-  unsigned long int *AL = (L1_ptr);
-  unsigned long int *AH = (L1_ptr+1); 
+/*
+  unsigned long int AL = (TEST_L1);
+  unsigned long int AH = (TEST_L1 >> 32); 
 
-  unsigned long int *BL = (L2_ptr);
-  unsigned long int *BH = (L2_ptr+1);
+  unsigned long int BL = (TEST_L2);
+  unsigned long int BH = (TEST_L2 >> 32);
+*/
   
-  unsigned long int *Mul_L = Mul_ptr;
-  unsigned long int *Mul_H = Mul_ptr+1;
+  unsigned long int AL = (l1);
+  unsigned long int AH = (l1 >> 32); 
+
+  unsigned long int BL = (l2);
+  unsigned long int BH = (l2 >> 32);
+  
+  unsigned long int Mul_L;
+  unsigned long int Mul_H;
 
   //Step 1
-  Temp_Mul = ((*AL) * (*BL));
+  Temp_Mul = (AL * BL);
+  Mul_L = Temp_Mul;
+  Mul_H = (Temp_Mul >> 32);
 
-  *Result_ptr += *Mul_L;       // First time addressing memory location. ^_^
-  *(Result_ptr + 1) += *Mul_H; // First time addressing memory location. ^_^
+  Result_ptr[0] += Mul_L;       // First time addressing memory location. ^_^
+  Result_ptr[1] += Mul_H; // First time addressing memory location. ^_^
 
   //Step 2
-  Temp_Mul = ((*AH) * (*BL));
-  Carry_Checker = *(Result_ptr+1);
-  *(Result_ptr + 1) += *Mul_L;      
-  Carry_Flag = (Carry_Checker < *(Result_ptr+1));
-  *(Result_ptr + 2) += Carry_Flag;
-  Carry_Checker = *(Result_ptr+2);
-  *(Result_ptr + 2) += *Mul_H; // First time addressing memory location. ^_^
-  Carry_Flag = (Carry_Checker < *(Result_ptr+2));
-  *(Result_ptr + 3) += Carry_Flag; // First time addressing memory location. ^_^
+  Temp_Mul = (AH * BL);
+  Mul_L = Temp_Mul;
+  Mul_H = (Temp_Mul >> 32);
+  /*
+  PutString("\r\n");
+  PutUnsigned(Mul_L, 18, 8);
+  PutString("\r\n");
+  PutUnsigned(Mul_H, 18, 8);  
+  PutString("Res: \r\n");
+  PutString(result);
+  */
+  //Carry_Checker = *(Result_ptr+1);
+  Result_ptr[1] += Mul_L;      
+  //Carry_Flag = (Carry_Checker > *(Result_ptr+1));
+  
+  //Carry_Checker = *(Result_ptr+2);
+  //*(Result_ptr + 2) += Carry_Flag;
+  Result_ptr[2] += (((Mul_H)));// + Carry_Flag);    
+  //Carry_Flag = (Carry_Checker > *(Result_ptr+2));
+  //Result_ptr[3] += Carry_Flag; // First time addressing memory location. ^_^
 
+  Temp_Mul = (AL * BH);
+  Mul_L = Temp_Mul;
+  Mul_H = (Temp_Mul >> 32);
 
-  Temp_Mul = ((*AL) * (*BH));
-  Carry_Checker = *(Result_ptr+1);
-  *(Result_ptr +1) += *Mul_L;      
-  Carry_Flag = (Carry_Checker < *(Result_ptr+1));
-  *(Result_ptr + 2) += Carry_Flag;
-  Carry_Checker = *(Result_ptr+2);
-  *(Result_ptr + 2) += *Mul_H;
-  Carry_Flag = (Carry_Checker < *(Result_ptr+2));
-  *(Result_ptr + 3) += Carry_Flag;
+  //Carry_Checker = *(Result_ptr+1);
+  *(Result_ptr +1) += Mul_L;      
+  //Carry_Flag = (Carry_Checker > *(Result_ptr+1));
+  //Carry_Checker = *(Result_ptr+2);
+  //*(Result_ptr + 2) += Carry_Flag;
+  
+  Result_ptr[2] += ((Mul_H));// + Carry_Flag);
+  //Carry_Flag = (Carry_Checker > *(Result_ptr+2));
+  //Result_ptr[3] += Carry_Flag;
 
 
   //Step 3
-  Temp_Mul = ((*AH) * (*BH));
+  Temp_Mul = (AH * BH);
 
-  *(Result_ptr +2) += *Mul_L;      
-  *(Result_ptr + 3) += *Mul_H; 
-  
-  Carry_Checker = *(Result_ptr+3);
-  Carry_Flag = (Carry_Checker < *(Result_ptr+3));
-  *(Result_ptr + 3) += Carry_Flag;
+  //Carry_Checker = *(Result_ptr+2);
+  Result_ptr[2] += Mul_L; 
+  //Carry_Flag = (Carry_Checker > *(Result_ptr+2));
+  //*(Result_ptr + 2) += Carry_Flag;
+  Result_ptr[3] += (Mul_H);// + Carry_Flag); 
+/*
+  PutString("\r\n");
+  PutUnsigned(Carry_Flag, 16, 8);
+  PutString("\r\n");
 
 
+  */
 }
 
 
