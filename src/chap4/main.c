@@ -25,7 +25,7 @@ void llmultiply(unsigned long long int l1, unsigned long long int l2, unsigned c
 void C_llmultiply(unsigned long long int l1, unsigned long long int l2, unsigned char *result)
 {
 
-<<<<<<< HEAD
+
   //unsigned int Carry_Flag = 0;
   unsigned long int Carry_Checker = 0; // OwO
 
@@ -35,7 +35,7 @@ void C_llmultiply(unsigned long long int l1, unsigned long long int l2, unsigned
   Result_ptr[1] = 0;
   Result_ptr[2] = 0;
   Result_ptr[3] = 0;
-<<<<<<< HEAD
+
 
   unsigned long int *L1_ptr = (unsigned long int*)&l1;
   unsigned long int *L2_ptr = (unsigned long int*)&l2;
