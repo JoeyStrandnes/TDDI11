@@ -30,6 +30,7 @@ int main()
   SetCursorVisible(TRUE) ;
   
   OSInit() ;
+  
   OSTaskCreate(ReceivePackets,	NULL, CreateStack(), 0) ;
   OSTaskCreate(InboundTime,	NULL, CreateStack(), 1) ;
   OSTaskCreate(InboundText,	NULL, CreateStack(), 2) ;

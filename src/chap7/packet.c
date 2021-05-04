@@ -54,7 +54,20 @@ void ReceivePackets(void)
 
 void SendPacket(int type, BYTE8 *bfr, int bytes)
 {
-  /*
-   * Your code here !
-   */
+
+  OS_EVENT *sending = OSSemCreate(1);
+  BYTE8 *err;
+
+  OSSemPend(sending, 0, err);
+
+  SerialPut(0xFF);
+  SerialPut(type);
+  SerialPut(bytes);
+
+  for(int i = 0;i < (bytes); i++)
+  {   
+    SerialPut(bfr[i]);
+  }
+
+  OSSemPost(sending);
 }
