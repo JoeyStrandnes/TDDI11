@@ -9,9 +9,13 @@ void OutBound(void) ;
 void InBound(void) ;
 void DisplayElapsedTime(void) ;
 
+void PrintData(const unsigned long Input);
+
 PRIVATE void SerialInit(void) ;
 
 QUEUE *inbound_queue ;
+
+ WINDOW *w ;
 
 int main()
 {
@@ -23,6 +27,8 @@ int main()
   
   MtCCoroutine(OutBound()) ;
   MtCCoroutine(InBound()) ;
+
+  MtCCoroutine(DisplayElapsedTime());
 
   
   return 0 ;
@@ -56,3 +62,40 @@ PRIVATE void SerialInit(void)
   /* Re-enable interrupts */
   enable() ;
 }
+
+
+void DisplayElapsedTime(void)
+{
+
+  w = WindowCreate("Time", 22, 24, 0, 79);
+
+  unsigned long int time;
+  unsigned int tmp = 0;
+
+  WindowSelect(w);
+  SetCursorVisible(0);
+  PutString("Time: ");
+
+
+
+  while(1)
+  {
+    
+    time = Milliseconds()/1000;
+
+    if(time > tmp){
+      tmp = time;
+      WindowSelect(w);
+      SetCursorPosition(23, 7);
+      PutUnsigned(time, 10, 2);
+      
+    }
+    
+    else{
+      MtCYield();
+    }
+
+  }
+
+}
+
