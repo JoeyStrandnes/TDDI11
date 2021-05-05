@@ -9,7 +9,7 @@ Archive member included to satisfy reference by file (symbol)
 /courses/TDDI11/sw/lib/elf/ucos_ii.a(os_q.o)
                               serial.o (OSQCreate)
 /courses/TDDI11/sw/lib/elf/ucos_ii.a(os_sem.o)
-                              packet.o (OSSemCreate)
+                              main.o (OSSemCreate)
 /courses/TDDI11/sw/lib/elf/ucos_ii.a(os_task.o)
                               main.o (OSTaskCreate)
 /courses/TDDI11/sw/lib/elf/ucos_ii.a(os_time.o)
@@ -62,6 +62,7 @@ Common symbol       size              file
 
 _OSTaskCtr          0x4               /courses/TDDI11/sw/lib/elf/ucos_ii.a(os_core.o)
 _OSTCBCur           0x4               /courses/TDDI11/sw/lib/elf/ucos_ii.a(os_core.o)
+sending             0x4               main.o
 _OSCtxSwCtr         0x4               /courses/TDDI11/sw/lib/elf/ucos_ii.a(os_core.o)
 _OSTCBList          0x4               /courses/TDDI11/sw/lib/elf/ucos_ii.a(os_core.o)
 _OSTCBHighRdy       0x4               /courses/TDDI11/sw/lib/elf/ucos_ii.a(os_core.o)
@@ -128,25 +129,25 @@ LOAD /courses/TDDI11/sw/i386-elf-gcc-7.3.0/lib/gcc/i386-elf/7.3.0/libgcc.a
                 0x0000000000000000                start
  *(.init)
  *(.text)
- .text          0x0000000000000008       0xe0 main.o
+ .text          0x0000000000000008       0xf2 main.o
                 0x0000000000000033                main
- .text          0x00000000000000e8      0x17e serial.o
-                0x00000000000000e8                SerialGet
-                0x0000000000000107                SerialPut
-                0x0000000000000156                SerialInit
- .text          0x0000000000000266       0xb2 inbound.o
-                0x000000000000028f                PostText
-                0x00000000000002b1                InboundText
- .text          0x0000000000000318      0x191 outbound.o
-                0x0000000000000318                OutboundThread
- .text          0x00000000000004a9      0x2ef elapsed.o
-                0x00000000000004d2                PostTime
-                0x00000000000004f4                InboundTime
-                0x0000000000000570                ElapsedLocal
- .text          0x0000000000000798      0x14a packet.o
-                0x0000000000000798                ReceivePackets
-                0x000000000000084a                SendPacket
- *fill*         0x00000000000008e2        0xe 
+ .text          0x00000000000000fa      0x17e serial.o
+                0x00000000000000fa                SerialGet
+                0x0000000000000119                SerialPut
+                0x0000000000000168                SerialInit
+ .text          0x0000000000000278       0xb2 inbound.o
+                0x00000000000002a1                PostText
+                0x00000000000002c3                InboundText
+ .text          0x000000000000032a      0x191 outbound.o
+                0x000000000000032a                OutboundThread
+ .text          0x00000000000004bb      0x2ef elapsed.o
+                0x00000000000004e4                PostTime
+                0x0000000000000506                InboundTime
+                0x0000000000000582                ElapsedLocal
+ .text          0x00000000000007aa      0x141 packet.o
+                0x00000000000007aa                ReceivePackets
+                0x000000000000085c                SendPacket
+ *fill*         0x00000000000008eb        0x5 
  .text          0x00000000000008f0       0x6d isr.o
                 0x00000000000008f0                OSKeyboardISR
                 0x0000000000000925                OSSerialISR
@@ -359,7 +360,7 @@ LOAD /courses/TDDI11/sw/i386-elf-gcc-7.3.0/lib/gcc/i386-elf/7.3.0/libgcc.a
  *(.rodata.str1.32)
                 0x0000000000006b29                data_last = (. - 0x1)
 
-.bss            0x0000000000006b40     0x2350
+.bss            0x0000000000006b40     0x2354
                 0x0000000000006b40                bss_frst = .
  *(.bss)
  .bss           0x0000000000006b40        0x0 main.o
@@ -398,61 +399,63 @@ LOAD /courses/TDDI11/sw/i386-elf-gcc-7.3.0/lib/gcc/i386-elf/7.3.0/libgcc.a
  .bss           0x000000000000757c        0x0 /courses/TDDI11/sw/lib/elf/djgpp/libc.a(enable.o)
  .bss           0x000000000000757c        0x0 /courses/TDDI11/sw/lib/elf/djgpp/libc.a(djmd.o)
  *(COMMON)
- COMMON         0x000000000000757c     0x190c /courses/TDDI11/sw/lib/elf/ucos_ii.a(os_core.o)
-                0x000000000000757c                _OSTaskCtr
-                0x0000000000007580                _OSTCBCur
-                0x0000000000007584                _OSCtxSwCtr
-                0x0000000000007588                _OSTCBList
-                0x000000000000758c                _OSTCBHighRdy
-                0x0000000000007590                _OSQTbl
-                0x0000000000007608                _OSRdyTbl
-                0x0000000000007610                _OSTaskIdleStk
-                0x0000000000007e10                _OSEventTbl
-                0x0000000000007eb0                _OSTCBFreeList
-                0x0000000000007eb4                _OSRdyGrp
-                0x0000000000007eb8                _OSIntExitY
-                0x0000000000007ebc                _OSPrioCur
-                0x0000000000007ec0                _OSQFreeList
-                0x0000000000007ec4                _OSIdleCtr
-                0x0000000000007ec8                _OSRunning
-                0x0000000000007ecc                _OSMemTbl
-                0x0000000000007f30                _OSPrioHighRdy
-                0x0000000000007f34                _OSTCBPrioTbl
-                0x0000000000008034                _OSLockNesting
-                0x0000000000008038                _OSTime
-                0x000000000000803c                _OSFlagTbl
-                0x0000000000008078                _OSTCBTbl
-                0x0000000000008e78                _OSIntNesting
-                0x0000000000008e7c                _OSEventFreeList
-                0x0000000000008e80                _OSMemFreeList
-                0x0000000000008e84                _OSFlagFreeList
- COMMON         0x0000000000008e88        0x8 /courses/TDDI11/sw/lib/elf/ucos_ii.a(os_cpu_c.o)
-                0x0000000000008e88                _OldTickISR
-                0x0000000000008e8c                _OSTickDOSCtr
-                0x0000000000008e8f                bss_last = (. - 0x1)
+ COMMON         0x000000000000757c        0x4 main.o
+                0x000000000000757c                sending
+ COMMON         0x0000000000007580     0x190c /courses/TDDI11/sw/lib/elf/ucos_ii.a(os_core.o)
+                0x0000000000007580                _OSTaskCtr
+                0x0000000000007584                _OSTCBCur
+                0x0000000000007588                _OSCtxSwCtr
+                0x000000000000758c                _OSTCBList
+                0x0000000000007590                _OSTCBHighRdy
+                0x0000000000007594                _OSQTbl
+                0x000000000000760c                _OSRdyTbl
+                0x0000000000007614                _OSTaskIdleStk
+                0x0000000000007e14                _OSEventTbl
+                0x0000000000007eb4                _OSTCBFreeList
+                0x0000000000007eb8                _OSRdyGrp
+                0x0000000000007ebc                _OSIntExitY
+                0x0000000000007ec0                _OSPrioCur
+                0x0000000000007ec4                _OSQFreeList
+                0x0000000000007ec8                _OSIdleCtr
+                0x0000000000007ecc                _OSRunning
+                0x0000000000007ed0                _OSMemTbl
+                0x0000000000007f34                _OSPrioHighRdy
+                0x0000000000007f38                _OSTCBPrioTbl
+                0x0000000000008038                _OSLockNesting
+                0x000000000000803c                _OSTime
+                0x0000000000008040                _OSFlagTbl
+                0x000000000000807c                _OSTCBTbl
+                0x0000000000008e7c                _OSIntNesting
+                0x0000000000008e80                _OSEventFreeList
+                0x0000000000008e84                _OSMemFreeList
+                0x0000000000008e88                _OSFlagFreeList
+ COMMON         0x0000000000008e8c        0x8 /courses/TDDI11/sw/lib/elf/ucos_ii.a(os_cpu_c.o)
+                0x0000000000008e8c                _OldTickISR
+                0x0000000000008e90                _OSTickDOSCtr
+                0x0000000000008e93                bss_last = (. - 0x1)
 
 /DISCARD/
  *(.eh_frame)
-                0x0000000000008e90                stack_frst = (bss_last + 0x1)
-                0x0000000000010e8f                stack_last = (bss_last + 0x8000)
-                0x0000000000010e90                heap_frst = (stack_last + 0x1)
+                0x0000000000008e94                stack_frst = (bss_last + 0x1)
+                0x0000000000010e93                stack_last = (bss_last + 0x8000)
+                0x0000000000010e94                heap_frst = (stack_last + 0x1)
 OUTPUT(embedded.bin binary)
 
-.debug_info     0x0000000000000000     0x2ae2
- .debug_info    0x0000000000000000      0x657 main.o
- .debug_info    0x0000000000000657      0x6b8 serial.o
- .debug_info    0x0000000000000d0f      0x72b inbound.o
- .debug_info    0x000000000000143a      0x7a7 outbound.o
- .debug_info    0x0000000000001be1      0x859 elapsed.o
- .debug_info    0x000000000000243a      0x6a8 packet.o
+.debug_info     0x0000000000000000     0x2af0
+ .debug_info    0x0000000000000000      0x668 main.o
+ .debug_info    0x0000000000000668      0x6b8 serial.o
+ .debug_info    0x0000000000000d20      0x72b inbound.o
+ .debug_info    0x000000000000144b      0x7a7 outbound.o
+ .debug_info    0x0000000000001bf2      0x859 elapsed.o
+ .debug_info    0x000000000000244b      0x6a5 packet.o
 
-.debug_abbrev   0x0000000000000000      0x88d
- .debug_abbrev  0x0000000000000000      0x12a main.o
- .debug_abbrev  0x000000000000012a      0x15d serial.o
- .debug_abbrev  0x0000000000000287      0x178 inbound.o
- .debug_abbrev  0x00000000000003ff      0x173 outbound.o
- .debug_abbrev  0x0000000000000572      0x1b9 elapsed.o
- .debug_abbrev  0x000000000000072b      0x162 packet.o
+.debug_abbrev   0x0000000000000000      0x89e
+ .debug_abbrev  0x0000000000000000      0x13b main.o
+ .debug_abbrev  0x000000000000013b      0x15d serial.o
+ .debug_abbrev  0x0000000000000298      0x178 inbound.o
+ .debug_abbrev  0x0000000000000410      0x173 outbound.o
+ .debug_abbrev  0x0000000000000583      0x1b9 elapsed.o
+ .debug_abbrev  0x000000000000073c      0x162 packet.o
 
 .debug_aranges  0x0000000000000000       0xc0
  .debug_aranges
@@ -468,21 +471,21 @@ OUTPUT(embedded.bin binary)
  .debug_aranges
                 0x00000000000000a0       0x20 packet.o
 
-.debug_line     0x0000000000000000      0x55f
- .debug_line    0x0000000000000000       0xc4 main.o
- .debug_line    0x00000000000000c4       0xe2 serial.o
- .debug_line    0x00000000000001a6       0xaa inbound.o
- .debug_line    0x0000000000000250      0x127 outbound.o
- .debug_line    0x0000000000000377      0x118 elapsed.o
- .debug_line    0x000000000000048f       0xd0 packet.o
+.debug_line     0x0000000000000000      0x561
+ .debug_line    0x0000000000000000       0xc6 main.o
+ .debug_line    0x00000000000000c6       0xe2 serial.o
+ .debug_line    0x00000000000001a8       0xaa inbound.o
+ .debug_line    0x0000000000000252      0x127 outbound.o
+ .debug_line    0x0000000000000379      0x118 elapsed.o
+ .debug_line    0x0000000000000491       0xd0 packet.o
 
-.debug_str      0x0000000000000000     0x1e98
- .debug_str     0x0000000000000000      0x4e4 main.o
- .debug_str     0x00000000000004e4      0x50c serial.o
- .debug_str     0x00000000000009f0      0x4fe inbound.o
- .debug_str     0x0000000000000eee      0x580 outbound.o
- .debug_str     0x000000000000146e      0x557 elapsed.o
- .debug_str     0x00000000000019c5      0x4d3 packet.o
+.debug_str      0x0000000000000000     0x1ea0
+ .debug_str     0x0000000000000000      0x4ec main.o
+ .debug_str     0x00000000000004ec      0x50c serial.o
+ .debug_str     0x00000000000009f8      0x4fe inbound.o
+ .debug_str     0x0000000000000ef6      0x580 outbound.o
+ .debug_str     0x0000000000001476      0x557 elapsed.o
+ .debug_str     0x00000000000019cd      0x4d3 packet.o
 
 .comment        0x0000000000000000       0x6c
  .comment       0x0000000000000000       0x12 main.o

@@ -12,6 +12,8 @@
 
 extern void OutboundThread() ;
 
+OS_EVENT *sending;
+
 PRIVATE OS_STK *CreateStack(void)
 {
   OS_STK *top = (OS_STK *) malloc(STACK_SIZE) + STACK_SIZE ;
@@ -36,7 +38,9 @@ int main()
   OSTaskCreate(InboundText,	NULL, CreateStack(), 2) ;
   OSTaskCreate(OutboundThread,	NULL, CreateStack(), 3) ;
   OSTaskCreate(ElapsedLocal,	NULL, CreateStack(), 4) ;
+  sending = OSSemCreate(1);
   OSStart() ;
+
 
   return 0 ;
 }
